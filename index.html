@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TARGET ANALYZER // CTU OPERATIONAL GRID</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div id="globe-overlay">
+        <div class="globe-vignette"></div>
+        <div class="globe-stage">
+            <div class="globe-ring-outer"></div>
+            <div class="globe-ring-mid"></div>
+            <canvas id="globe-canvas" class="ctu-globe-canvas" width="520" height="520"></canvas>
+            <div class="globe-reticle"></div>
+            <div class="globe-crosshair-h"></div>
+            <div class="globe-crosshair-v"></div>
+            <span class="globe-corner tl"></span><span class="globe-corner tr"></span>
+            <span class="globe-corner bl"></span><span class="globe-corner br"></span>
+        </div>
+        <div class="globe-hud globe-hud-top" id="globe-title">ESTABLECIENDO ENLACE SATELITAL // CTU_NODE_04</div>
+        <div class="globe-hud globe-hud-coords" id="globe-coords">LAT: --.----  LON: --.----</div>
+        <div class="globe-progress-wrap"><div class="globe-progress-fill" id="globe-progress-fill"></div></div>
+        <div class="globe-caption blink" id="globe-status">TRIANGULANDO VECTOR GLOBAL // GEO-INTERCEPCIÓN</div>
+    </div>
+
+    <div id="system-terminal" class="terminal-login-mode">
+
+        <div class="login-wrapper">
+            <div class="logo-24-emblem">24</div>
+            <div class="logo-title-main">TARGET ANALYZER</div>
+            <div class="logo-subtitle-service">SERVICIO DE ESPIONAJE</div>
+            <div class="logo-location-ba">BUENOS AIRES // RED INTEGRADA</div>
+
+            <div class="input-group">
+                <span class="auth-tag">OPERATOR_ID:&gt;</span>
+                <input type="text" value="comision04" readonly>
+            </div>
+            <div class="input-group">
+                <span class="auth-tag">ACCESS_CODE:&gt;</span>
+                <input type="password" value="•••••••••••••" readonly>
+            </div>
+
+            <button id="btn-decrypt" onclick="initializeSystem()">INICIAR PROTOCOLO COMISIÓN 04</button>
+            <div id="login-status" class="status-text">SISTEMA EN ESPERA // PRESIONE PARA DESENCRIPTAR</div>
+        </div>
+
+        <div class="mainframe-content">
+
+            <header class="mainframe-header">
+                <div class="brand">📡 TARGET ANALYZER // PANEL HOLOGRÁFICO OPERATIVO</div>
+                <div class="ctu-clock" id="ctu-timer">[ 00:00:00 ]</div>
+                <div class="zone-tag">BA_ZONE // LIVE_INTERCEPT</div>
+                <div class="header-controls" style="display: flex; gap: 8px;">
+                    <button id="btn-toggle-view" onclick="CoverFlow.toggle()">[ 🔲 MODO: INDIVIDUAL ]</button>
+                    <button id="btn-mute" onclick="toggleMute()">🔊 SFX ON</button>
+                </div>
+            </header>
+
+            <div class="command-bar">
+                <span class="auth-tag cmd">EXEC_SEARCH_:&gt;</span>
+                <input type="text" id="target-search-input" placeholder="Ingrese URL del objetivo..." onkeypress="checkSearchEnter(event)">
+                <button id="btn-search-target" onclick="rastrear()">RASTREAR</button>
+                <span id="search-log" class="search-log">MÓDULO DE FIJACIÓN DE VECTOR ACTIVO // COMISIÓN 04</span>
+            </div>
+
+            <div class="grid-4" id="main-grid">
+
+                <section class="panel" id="panel-map">
+                    <div class="panel-bar cyan">📍 VECTOR RADAR // GEOLOCALIZACIÓN DEL SERVIDOR</div>
+                    <div class="panel-body no-pad">
+                        <div id="map-tactico"></div>
+                        <div class="radar-sweep"></div>
+                    </div>
+                </section>
+
+                <section class="panel" id="panel-shot">
+                    <div class="panel-bar orange">📸 CAPTURA VISUAL // INTERCEPCIÓN DE PANTALLA</div>
+                    <div class="panel-body shot-body">
+                        <div id="shot-wrap"><img id="shot-img" alt="captura del objetivo"></div>
+                        <div id="shot-status" class="mini-status">EN ESPERA DE OBJETIVO...</div>
+                    </div>
+                </section>
+
+                <section class="panel" id="panel-meta">
+                    <div class="panel-bar orange">🗃️ EXPEDIENTE DE CAMPO // DATOS Y MÉTRICAS</div>
+                    <div class="panel-body scroll">
+
+                        <div id="meta-content"><div class="idle-line">SIN OBJETIVO FIJADO</div></div>
+
+                        <div class="telemetry-card" id="metrics-container" style="display: none; margin-top: 15px;">
+                            <div class="telemetry-title">▶ FREQUENCY ANALYSIS LOGS // [STATS]</div>
+                            <div class="stats-list" id="stats-content">
+                                </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="panel" id="panel-tech">
+                    <div class="panel-bar cyan">🛰️ INFRAESTRUCTURA // TECNOLOGÍAS Y ENLACES</div>
+                    <div class="panel-body scroll">
+
+                        <div class="telemetry-card">
+                            <div class="telemetry-title">▶ CORE_SERVER_NODES // [TECH]</div>
+                            <div class="tech-nodes-wrapper" id="tech-content">
+                                <span class="idle-line">ESPERANDO TRAFICO DE RED...</span>
+                            </div>
+                        </div>
+
+                        <div class="telemetry-card" style="margin-top: 15px;">
+                            <div class="telemetry-title">▶ EXTRACTED TARGET LINKS // [ROUTING]</div>
+                            <div class="link-stream-container custom-scrollbar" id="links-content">
+                                <span class="idle-line">SIN ENLACES DETECTADOS</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+
+            <div class="nav-controls hidden" id="coverflow-nav">
+                <button class="nav-btn" onclick="CoverFlow.goTo(CoverFlow.activeIndex - 1)">◀</button>
+                <div class="nav-dots" id="dots"></div>
+                <button class="nav-btn" onclick="CoverFlow.goTo(CoverFlow.activeIndex + 1)">▶</button>
+                <span class="nav-hint">FLECHAS ← → · TRACKPAD/SCROLL</span>
+            </div>
+
+        </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="mundo-data.js"></script>
+    <script src="main.js"></script>
+    <script src="efectos.js"></script>
+</body>
+</html>
