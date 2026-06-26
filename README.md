@@ -47,7 +47,7 @@ En VS Code podés seleccionar el entorno virtual como intérprete de Python pres
 instalá todas las librerías necesarias con un solo comando:
 
 ```
-pip install -r requirements.txt 
+npm install
 ```
 
 ## Autores
