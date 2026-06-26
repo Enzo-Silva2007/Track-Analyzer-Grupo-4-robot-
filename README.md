@@ -28,7 +28,8 @@ Un entorno virtual permite instalar las librerías del proyecto sin afectar el r
 ```
 python -m venv venv
 ```
-**Activarlo:**
+**Activarlo**:
+
 En Windows:
 ```
 venv\Scripts\activate
