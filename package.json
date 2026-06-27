@@ -1,0 +1,28 @@
+{
+  "name": "track-analyzer-grupo-4-robot-",
+  "version": "1.0.0",
+  "description": "> Parte del robot del proyecto para realizar Web Scraping: Track-Analyze",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Enzo-Silva2007/Track-Analyzer-Grupo-4-robot-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Enzo-Silva2007/Track-Analyzer-Grupo-4-robot-/issues"
+  },
+  "homepage": "https://github.com/Enzo-Silva2007/Track-Analyzer-Grupo-4-robot-#readme",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "puppeteer": "^25.2.1"
+  },
+  "allowScripts": {
+    "puppeteer@25.2.1": true
+  }
+}
