@@ -23,31 +23,12 @@
 ### Crear un entorno virtual (recomendado)
 Un entorno virtual permite instalar las librerías del proyecto sin afectar el resto de tu sistema. Es una buena práctica y se recomienda hacerlo siempre.
 
-**Crear el entorno virtual:**
 
-```
-python -m venv venv
-```
-**Activarlo**:
-
-En Windows:
-```
-venv\Scripts\activate
-```
-
-En Mac / Linux:
-```
-source venv/bin/activate
-```
-
-Cuando está activo, vas a ver (venv) al principio de la línea en la terminal.
-En VS Code podés seleccionar el entorno virtual como intérprete de Python presionando Ctrl+Shift+P y buscando "Python: Select Interpreter". Elegí el que dice venv.
-
-### Cómo instakar las dependencias
+### Cómo instalar las dependencias
 instalá todas las librerías necesarias con un solo comando:
 
 ```
-npm install
+npm install  + express, cors, cheerio o puppeteer (para instalar las dependencias)
 ```
 
 ## Autores
