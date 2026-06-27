@@ -28,7 +28,7 @@ Un entorno virtual permite instalar las librerías del proyecto sin afectar el r
 instalá todas las librerías necesarias con un solo comando:
 
 ```
-npm install # + express, cors, cheerio o puppeteer, para instalar las dependencias
+npm install  + express, cors, cheerio o puppeteer (para instalar las dependencias)
 ```
 
 ## Autores
