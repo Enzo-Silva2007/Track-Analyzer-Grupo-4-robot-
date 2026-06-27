@@ -29,6 +29,7 @@ instalá todas las librerías necesarias con un solo comando:
 
 ```
 npm install  + express, cors, cheerio o puppeteer (para instalar las dependencias)
+#nota: El .gitignore hace que la carpeta "/node_modules" no sea pusheada junto a los otros archivos, por lo tanto, no se preocupen por eso, se usara el "/node_modules" que tienen descargados en sus equipos
 ```
 
 ## Autores
