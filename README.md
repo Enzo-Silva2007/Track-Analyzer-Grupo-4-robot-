@@ -32,4 +32,4 @@ npm install  + express, cors, cheerio o puppeteer (para instalar las dependencia
 ```
 
 ## Autores
-Integrantes: **Facundo Bellochi**, **Santi Leffler**, **Jualian Dalmazo**, **Esteban Nuñez**, **Thiago Alegre** y **Enzo Gabriel Silva**
+Integrantes: **Facundo Bellochi**, **Santi Leffler**, **Jualian Dalmazzo**, **Esteban Nuñez**, **Thiago Alegre** y **Enzo Gabriel Silva**
