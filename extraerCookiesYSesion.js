@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 const PATRONES_SESION = [
   'session', 'sess', 'sid', 'auth', 'token',
@@ -20,27 +20,21 @@ async function extraerCookiesYSesion(urlObjetivo) {
     const pagina = await navegador.newPage();
     await pagina.goto(urlObjetivo, { waitUntil: 'networkidle2' });
 
-    // --------------------------------------------------------
-    // BLOQUE 1: COOKIES (Borrar comentario guia si se manda el codigo)
-    // --------------------------------------------------------
     const todasLasCookies = await pagina.cookies();
     const cookiesClasificadas = todasLasCookies.map(cookie => ({
-      nombre:    cookie.name,
-      valor:     cookie.value,
-      dominio:   cookie.domain,
-      path:      cookie.path,
-      expira:    cookie.expires !== -1
-                   ? new Date(cookie.expires * 1000).toISOString()
-                   : 'Sesión (expira al cerrar)',
-      segura:    cookie.secure,
-      soloHttp:  cookie.httpOnly,    
-      sameSite:  cookie.sameSite || 'Sin restricción',
+      nombre:     cookie.name,
+      valor:      cookie.value,
+      dominio:    cookie.domain,
+      path:       cookie.path,
+      expira:     cookie.expires !== -1
+                    ? new Date(cookie.expires * 1000).toISOString()
+                    : 'Sesión (expira al cerrar)',
+      segura:     cookie.secure,
+      soloHttp:   cookie.httpOnly,
+      sameSite:   cookie.sameSite || 'Sin restricción',
       esDeSesion: esDeSesion(cookie.name)
     }));
 
-    // --------------------------------------------------------
-    // BLOQUE 2: ALmacenamiento local
-    // --------------------------------------------------------
     const localStorage = await pagina.evaluate(() => {
       const datos = {};
       for (let i = 0; i < window.localStorage.length; i++) {
@@ -50,20 +44,14 @@ async function extraerCookiesYSesion(urlObjetivo) {
       return datos;
     });
 
-    // Filtramos las claves de localStorage que parecen tokens de sesión
     const tokensLocalStorage = Object.entries(localStorage)
       .filter(([clave]) => esDeSesion(clave))
       .map(([clave, valor]) => ({
         clave,
-        // Truncamos el valor por si es un JWT largo; mostramos solo los primeros 80 chars
-        valorPreview: valor.length > 80 ? valor.substring(0, 80) + '...' : valor,
+        valorPreview:  valor.length > 80 ? valor.substring(0, 80) + '...' : valor,
         longitudTotal: valor.length
       }));
 
-    // --------------------------------------------------------
-    // BLOQUE 3: ALMACENAMIENTO DE SESION
-    // Similar a localStorage pero solo vive en la pestaña actual
-    // --------------------------------------------------------
     const sessionStorage = await pagina.evaluate(() => {
       const datos = {};
       for (let i = 0; i < window.sessionStorage.length; i++) {
@@ -77,33 +65,34 @@ async function extraerCookiesYSesion(urlObjetivo) {
       .filter(([clave]) => esDeSesion(clave))
       .map(([clave, valor]) => ({
         clave,
-        valorPreview: valor.length > 80 ? valor.substring(0, 80) + '...' : valor,
+        valorPreview:  valor.length > 80 ? valor.substring(0, 80) + '...' : valor,
         longitudTotal: valor.length
       }));
-    // --- Se cierra el navegador ---
+
     await navegador.close();
 
-    // JSON FINAL
     return {
       cookies: {
-        total: cookiesClasificadas.length,
-        deSesion: cookiesClasificadas.filter(c => c.esDeSesion).length,
-        lista: cookiesClasificadas
+        total:     cookiesClasificadas.length,
+        deSesion:  cookiesClasificadas.filter(c => c.esDeSesion).length,
+        lista:     cookiesClasificadas
       },
       almacenamiento: {
         localStorage: {
-          totalClaves: Object.keys(localStorage).length,
+          totalClaves:              Object.keys(localStorage).length,
           tokensDeSesionDetectados: tokensLocalStorage
         },
         sessionStorage: {
-          totalClaves: Object.keys(sessionStorage).length,
+          totalClaves:              Object.keys(sessionStorage).length,
           tokensDeSesionDetectados: tokensSessionStorage
         }
       }
     };
+
   } catch (error) {
     if (navegador) await navegador.close();
     throw new Error(`[extraerCookiesYSesion] Falla: ${error.message}`);
   }
 }
-module.exports = extraerCookiesYSesion;
+
+export default extraerCookiesYSesion;
