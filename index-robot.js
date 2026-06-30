@@ -4,6 +4,7 @@ import extraerRendimiento     from './extraerRendimiento.js';
 import extraerCookiesYSesion  from './extraerCookiesYSesion.js';
 import extraerIpYRed          from './extraerIpYRed.js';
 import extraerDocumentos      from './extraerDocumentos.js';
+import extraerImagenes        from './extraerImagenes.js';
 
 function resolver(resultado, nombre) {
   if (resultado.status === 'fulfilled') return resultado.value;
@@ -22,6 +23,7 @@ export async function ejecutarRobot(urlObjetivo) {
     cookiesYSesion,
     ipYRed,
     documentos,
+    imagenes,
   ] = await Promise.allSettled([
     extraerIdentidad(urlObjetivo),
     extraerInfraestructura(urlObjetivo),
@@ -29,6 +31,7 @@ export async function ejecutarRobot(urlObjetivo) {
     extraerCookiesYSesion(urlObjetivo),
     extraerIpYRed(urlObjetivo),
     extraerDocumentos(urlObjetivo),
+    extraerImagenes(urlObjetivo),
   ]);
 
   return {
@@ -40,5 +43,6 @@ export async function ejecutarRobot(urlObjetivo) {
     cookiesYSesion:  resolver(cookiesYSesion,  'extraerCookiesYSesion'),
     ipYRed:          resolver(ipYRed,          'extraerIpYRed'),
     documentos:      resolver(documentos,      'extraerDocumentos'),
+    imagenes:        resolver(imagenes,        'extraerImagenes'),
   };
 }
