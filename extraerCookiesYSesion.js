@@ -70,7 +70,8 @@ async function extraerCookiesYSesion(urlObjetivo) {
       }));
 
     await navegador.close();
-
+    navegador = null;
+    
     return {
       cookies: {
         total:     cookiesClasificadas.length,
