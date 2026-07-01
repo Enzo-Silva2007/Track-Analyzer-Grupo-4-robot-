@@ -1,4 +1,4 @@
-const puppeteer = requiere('puppeteer');
+import puppeteer from 'puppeteer';
  
 async function generarPdf(urlObjetivo){
     let navegador;
